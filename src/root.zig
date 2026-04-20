@@ -65,8 +65,8 @@ pub fn parseSlice(
 }
 
 fn resolveShort(comptime T: type, ch: u8) ?[]const u8 {
-    if (!@hasDecl(T, "short")) return null;
-    const sh = T.short;
+    if (!@hasDecl(T, "shorthands")) return null;
+    const sh = T.shorthands;
     inline for (std.meta.fields(@TypeOf(sh))) |f| {
         if (f.name.len == 1 and f.name[0] == ch)
             return @field(sh, f.name);
