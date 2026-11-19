@@ -2,7 +2,7 @@
 
 An extremely minimal argument parsing library for Zig
 
----
+______________________________________________________________________
 
 **zopt** is a cli argument parsing library designed to be as minimal and user friendly as possible.
 
@@ -10,7 +10,7 @@ On the command line, it functions similarly to `getopt`. However, in code it run
 
 ### Requirements
 
-- [Zig](https://ziglang.org) 0.16.0
+- [Zig](https://ziglang.org) 0.17.0
 
 ### Usage
 
