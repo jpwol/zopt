@@ -67,9 +67,9 @@ pub fn parseSlice(
 fn resolveShort(comptime T: type, ch: u8) ?[]const u8 {
     if (!@hasDecl(T, "shorthands")) return null;
     const sh = T.shorthands;
-    inline for (std.meta.fields(@TypeOf(sh))) |f| {
-        if (f.name.len == 1 and f.name[0] == ch)
-            return @field(sh, f.name);
+    inline for (@typeInfo(@TypeOf(sh)).@"struct".field_names) |f| {
+        if (f.len == 1 and f[0] == ch)
+            return @field(sh, f);
     }
     return null;
 }
@@ -82,18 +82,18 @@ fn setField(
     raw: []const []const u8,
     i: *usize,
 ) !bool {
-    inline for (std.meta.fields(T)) |f| {
-        if (f.name[0] == '_') continue;
-        if (std.mem.eql(u8, f.name, name)) {
-            switch (f.type) {
-                bool => @field(flags, f.name) = true,
+    inline for (@typeInfo(T).@"struct".field_names) |f| {
+        if (f[0] == '_') continue;
+        if (std.mem.eql(u8, f, name)) {
+            switch (@FieldType(T, f)) {
+                bool => @field(flags, f) = true,
                 []const u8 => {
                     const val = inline_val orelse blk: {
                         i.* += 1;
                         if (i.* >= raw.len) return error.MissingArgument;
                         break :blk raw[i.*];
                     };
-                    @field(flags, f.name) = val;
+                    @field(flags, f) = val;
                 },
                 else => {
                     const val = inline_val orelse blk: {
@@ -101,7 +101,7 @@ fn setField(
                         if (i.* >= raw.len) return error.MissingArgument;
                         break :blk raw[i.*];
                     };
-                    @field(flags, f.name) = std.fmt.parseInt(f.type, val, 10) catch
+                    @field(flags, f) = std.fmt.parseInt(@FieldType(T, f), val, 10) catch
                         return error.InvalidArgument;
                 },
             }
