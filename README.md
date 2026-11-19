@@ -115,3 +115,8 @@ pub fn build(b: *std.Build) void {
 
 where `main_mod` is just an example of your main module. The main takeaway is once you fetch the dependency,
 it can be defined in your `build.zig` with `b.dependency(...)`, and the module for importing is extracted with `.module(...)`.
+
+### Acknowledgements
+
+This project share's it's struct-based config structure with [ikskuh/zig-args](https://github.com/ikskuh/zig-args). The libraries function differently, however, *zig-args* is much more mature. It is recommended to
+use that library if the use case is more serious or complex. This library, *zopt* was made for myself to quickly and simply parse cli arguments. If that is your goal, this library will be sufficient.
